@@ -1,16 +1,19 @@
 /* @flow */
 
+import type { BytesR } from "@capnp-js/bytes";
 import type { Source } from "@capnp-js/transform";
 
-const EMPTY = new Uint8Array(0);
+import { create } from "@capnp-js/bytes";
+
+const EMPTY = create(0);
 
 export interface Readable {
   once(event: "readable", listener: () => void): mixed;
-  read(): Uint8Array | null;
+  read(): BytesR | null;
 }
 
-export default function readable(readable_: Readable): Source<Uint8Array> {
-  return function (abort: null | true, put: (done: null | (true | Error), value: Uint8Array) => void): void {
+export default function readable(readable_: Readable): Source<BytesR> {
+  return function (abort: null | true, put: (done: null | (true | Error), value: BytesR) => void): void {
     // #if _DEBUG
     console.log("registering for a single readable event");
     // #endif
